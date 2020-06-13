@@ -1,0 +1,282 @@
+<!--
+	Name: Tadjiev Mukhammadkhon Student#0971040
+	Date: March 12 2020
+	Purpose: Lab 5 - Arrays
+-->
+<!DOCTYPE html>
+<html>
+
+<body style="background-color: #aaffcd;" onload="changeItemDropdown(50);">
+    <h1>Grocery Store</h1>
+
+    <hr>
+
+    <!-- Department Selection Area -->
+    <h3>Department</h3>
+    <div style="border: 1px solid black; padding: 5px; background-color: #ffffff;">
+        <select id="ddDepartment" onchange="displayProducts();">    
+				<option>Produce</option>
+				<option>Bakery</option>
+				<option>Meats</option>
+				<option>Cheese</option>
+			</select>
+    </div>
+
+    <hr>
+
+    <!-- Product Output Area -->
+    <h3>Products Available</h3>
+    <div id="productOutput" style="border: 1px solid black; padding: 5px; background-color: #ffffff;">[Select a Department]</div>
+
+    <!-- Add Product to Department -->
+    <p>Add Product:
+        <input type="text" id="product" value="A new value" onfocus="clearInput();">
+        <input type="button" value="Add Product" onclick="addProduct();">
+    </p>
+
+    <hr>
+
+    <!-- Product Selection Field -->
+    <h3>Shopping Cart</h3>
+
+    <p>Add Item #
+        <select id="itemNumDropdown"><option selected disabled value="null">00</option></select> to Cart:
+        <input type="button" value="Add to Cart" onclick="addItemToCart();">
+    </p>
+
+    <!-- Product Output Area -->
+    <div id="cartOutput" style="border: 1px solid black; padding: 5px; background-color: #ffffff;">[Add an Item to Cart]</div>
+
+    <!-- Javascript -->
+    <script>
+        /*
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        				changeItemDropdown()
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        				Purpose: Populate the dropdown with numbers from 1 to maxNumber
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        				Parameters: maxNumber 
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        				Returns: Nothing
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        			*/
+        function changeItemDropdown(maxNumber) {
+            // Validate maxNumber
+            if (maxNumber > 1) {
+                // Get Dropdown Element
+                var dropDown = document.getElementById("itemNumDropdown");
+
+                // Empty Dropdown
+                dropDown.innerHTML = "";
+
+                // Create default option 00
+                var defaultOption = document.createElement("option");
+                defaultOption.innerHTML = "00";
+                defaultOption.value = null;
+                defaultOption.disabled = true;
+                defaultOption.selected = true;
+                dropDown.appendChild(defaultOption);
+
+                // Add options to dropDown
+                for (var x = 1; x <= maxNumber; x++) {
+                    var tempElement = document.createElement("option");
+                    tempElement.innerHTML = x;
+                    tempElement.value = x;
+                    dropDown.appendChild(tempElement);
+                }
+
+                console.log("Dropdown updated!");
+
+            } // end if
+            else {
+                console.log("Dropdown not updated!");
+            }
+
+        } // end changeItemDropdown function
+
+
+
+        //Global variables to store the Data of the items
+        let produce = ["Apples", "Bananas", "Mangos", "Grapes", "Cauliflower",
+            "Broccoli", "Avacado"
+        ];
+
+        let bakery = ["Baguette", "Pumpkin Pie", "Chocolate Cookies",
+            "Croissant"
+        ];
+
+        let meats = ["Beef", "Chicken", "Salami", "Ham", "Turkey"];
+        let cheese = ["Cheddar", "Swiss", "Montaray Jack", "Gouda", "Havarti",
+            "Asiago"
+        ];
+        //Empty array to add items to the shopping cart
+        let shoppingCart = [];
+
+
+
+        //Global Div to output the available products or elements
+        var outputElement = document.getElementById("productOutput");
+        var departmentSelection = document.getElementById("ddDepartment");
+
+
+
+
+        function displayProducts() {
+            //To reset each time so displays another items of if statement
+            outputElement.innerHTML = "";
+            //statement if value of this dropdown equals Produce then run the loop and other else if conditions
+            if (departmentSelection.value === "Produce") {
+
+                for (var index = 0; index < produce.length; index++) {
+                    // output each item in the array using the loop control variable as the index
+                    outputElement.innerHTML = outputElement.innerHTML +
+                        ` Item #${index + 1}:  ${produce[index] }   <br>`;
+                    //New method string interpolation used to make it easier without typing lots of ""
+                    console.log(index);
+                }
+            } else if (departmentSelection.value === "Bakery") {
+
+                for (var index = 0; index < bakery.length; index++) {
+                    // output each item in the array using the loop control variable as the index
+                    outputElement.innerHTML +=
+                        ` Item #${index + 1}:  ${bakery[index] }   <br>`;
+                    //And also index + 1in the beginnign lets me start the index from 1 not zero 0 like supposed to be
+                    console.log(index);
+                }
+
+            } else if (departmentSelection.value === "Meats") {
+
+                for (var index = 0; index < meats.length; index++) {
+                    // output each item in the array using the loop control variable as the index
+                    outputElement.innerHTML = outputElement.innerHTML +
+                        ` Item #${index + 1}:  ${meats[index] }   <br>`;
+
+                    console.log(index);
+                }
+
+            } else if (departmentSelection.value === "Cheese") {
+
+                for (var index = 0; index < cheese.length; index++) {
+                    // output each item in the array using the loop control variable as the index
+                    outputElement.innerHTML = outputElement.innerHTML +
+                        ` Item # ${index + 1}:  ${cheese[index] }   <br>`;
+
+                    console.log(index);
+                }
+
+            }
+
+        } //End of the function displayProducts() last closing curly bracket
+
+
+
+
+        function addProduct() {
+            //with .value in the end of this statement we get the value entered on the input with the id of "product"
+            var gettingTxtBoxValue = document.getElementById("product").value;
+
+            if (departmentSelection.value === "Produce") {
+                //This is how we can add the value of input through push() in built array method and select the  gettingTxtBoxValue from where we get the value
+                produce.push(gettingTxtBoxValue);
+
+            } else if (departmentSelection.value === "Bakery") {
+                bakery.push(gettingTxtBoxValue);
+
+            } else if (departmentSelection.value === "Meats") {
+                meats.push(gettingTxtBoxValue);
+                //And push() adds to the end of the array means it would be last stored values of array with following index numbers 
+            } else if (departmentSelection.value === "Cheese") {
+                cheese.push(gettingTxtBoxValue);
+
+            }
+            //Calling the displayProducts(); function here to output the kind of result
+            displayProducts();
+        } //End of the function addProduct ()
+
+
+
+        //Special function that clears the input onfocus after the product has been entered into the array
+        function clearInput() {
+            document.getElementById('product').value = "";
+        }
+        //There's another way as well to clear the textbox onfocus but I tried to use the method we learned in a more simple way without this keyword
+        //onfocus="if(this.value=='Add Product') this.value='';"
+
+
+
+
+        //To check the quantity of numbers selected on the dropdown like how many items
+        //First I wanted to use this function to check if the dropdown list number is higher but then 
+        //found it useless
+        /*
+        function checkQuantity(number) {
+
+            if (number <= 7) {
+                alert("Successful entry");
+                return number >= 7;
+            } else if (number > 7) {
+                alert("The value passed is invalid, Please try again!");
+
+            }
+
+        }
+        */
+
+        function addItemToCart() {
+
+            var gettingTxtBxValue2 = document.getElementById("itemNumDropdown").value;
+            var gettingTxt = document.getElementById("itemNumDropdown");
+            var cartOutputDiv = document.getElementById("cartOutput");
+            //var productText = document.getElementById("product").value;
+            //Again unneccesary here this DOm .value selection so uncommented
+            if (departmentSelection.value === "Produce") {
+                if (gettingTxt.value > produce.length) {
+                    alert("The value passed is invalid, Please try again!");
+
+                } else {
+                    //checks if all elements there .every built in JS method
+                    //Thought to use to check all elements but then found it redundant again and useless in this point
+                    //produce.every(checkQuantity);
+                    //+= saves us from repaeating cartOutputDiv.innerHTML but then I figured out that = is just sufficient in this instance
+                    shoppingCart.push(produce[gettingTxtBxValue2 - 1]);
+                    cartOutputDiv.innerHTML = shoppingCart;
+
+                }
+
+            }
+            if (departmentSelection.value === "Bakery") {
+                if (gettingTxt.value > bakery.length) {
+                    alert("The value passed is invalid, Please try again!");
+                } else {
+                    //bakery.every(checkQuantity);
+                    //here adds to shopping cart item from the bakery array according to the index number selected in the dropdown 
+                    shoppingCart.push(bakery[gettingTxtBxValue2 - 1]);
+                    cartOutputDiv.innerHTML = shoppingCart;
+                    //Output equals to what's available in the shopping Cart
+                }
+            }
+            if (departmentSelection.value === "Meats") {
+                if (gettingTxt.value > meats.length) {
+                    alert("The value passed is invalid, Please try again!");
+                } else {
+                    //meats.every(checkQuantity);
+                    shoppingCart.push(meats[gettingTxtBxValue2 - 1]);
+                    cartOutputDiv.innerHTML = shoppingCart;
+
+                }
+            }
+            if (departmentSelection.value === "Cheese") {
+                //here if the number of items more than we have in the array cheese example then alert that value passed is invalid
+                if (gettingTxt.value > cheese.length) {
+                    alert("The value passed is invalid, Please try again!");
+                } else {
+                    //cheese.every(checkQuantity);
+                    shoppingCart.push(cheese[gettingTxtBxValue2 - 1]);
+                    //this part pushes adds the item to the empty array shoppingCart from cheese array plus according to the index which was selected on the dropdwon again I made - 1 so it adds the right index
+                    cartOutputDiv.innerHTML = shoppingCart;
+
+
+                }
+            }
+        } //End of the function
+
+        // push method to use in order to add to the empty Array and specifically ends to the end of the array with a following index number automatically set by JavaScript
+    </script>
+</body>
+
+</html>
